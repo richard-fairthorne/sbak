@@ -34,42 +34,23 @@ Options:
 
 "
 
-# -d - The directory which the backups reside in. ~/.sbak by default
+# defaults
 BACKUP_DIR=~/.sbak
-
-# -n - The number of backups to be kept
 NUM_BACKUPS=10
-
-# -b - The bandwidth limit in kb/s. 0 turns off the limit
 BWLIMIT=0
-
-# -p - Priority. Higher numbers represent lower priorities.
 NICE_SERVER=10
-
-# -l - Login. Defaults to root
 LOGIN=root
 
+# arguments
 while getopts 'b:d:n:p:l:' OPTION
 do
 	case $OPTION in
-		b) BWLIMIT=$OPTARG
-		;;
-
-		d) BACKUP_DIR=$OPTARG
-		;;
-
-		n) NUM_BACKUPS=$OPTARG
-		;;
-
-		p) NICE_SERVER=$OPTARG
-		;;
-
-		l) LOGIN=$OPTARG
-		;;
-
-		?) echo "$USAGE"
-		exit 2
-		;;
+		b) BWLIMIT=$OPTARG;;
+		d) BACKUP_DIR=$OPTARG;;
+		n) NUM_BACKUPS=$OPTARG;;
+    p) NICE_SERVER=$OPTARG;;
+		l) LOGIN=$OPTARG;;
+		?) echo "$USAGE"; exit 2;;
 	esac
 done
 shift $(($OPTIND - 1))
