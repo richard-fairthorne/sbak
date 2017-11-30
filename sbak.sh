@@ -1,6 +1,7 @@
 #!/bin/bash
 #    sbak - remote Server BAKups - quick and easy
-#    Copyright (C) 2009 Obstacles Gone Corporation
+#    Copyright (C) 2009 HashBang Media
+#    http://www.hashbang.info
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,11 +20,6 @@
 
 # Set usage text
 USAGE="
-#    sbak - remote Server BAKups - quick and easy
-#    Copyright (C) 2009 Obstacles Gone Corporation
-#    http://www.obstaclesgone.com
-#
-# ################################################
 
 Usage: $(basename $0) [<options>] <host>
 
@@ -36,15 +32,9 @@ Options:
                             less server resources.
   -l <login>              - default is root.
 
-Advice:
-
-  To script sbak, share a key with your server so that you don't have to enter
-  passwords each time the script is run. Look up a howto on shared keys and
-  ssh-agent.
-
 "
 
-# -d - The directory which the backups reside in. Assume to be ~/backups. Typically, this will map to /root/backups
+# -d - The directory which the backups reside in. ~/.sbak by default
 BACKUP_DIR=~/.sbak
 
 # -n - The number of backups to be kept
@@ -118,7 +108,7 @@ echo
 if [ ! -e $BACKUP_DIR/$SERVER ]
 then
 	echo "Creating backup directory."
-	mkdir -p $BACKUP_DIR/$SERVER
+	mkdir -p $BACKUP_DIR/$SERVER/backups
 fi
 
 if [ ! -e $BACKUP_DIR/$SERVER/exclude ]
@@ -127,35 +117,35 @@ then
 	>$BACKUP_DIR/$SERVER/exclude
 fi
 
-if [ -e $BACKUP_DIR/$SERVER/new-backup ]
+if [ -e $BACKUP_DIR/$SERVER/backups/.new-backup ]
 then
 	echo "Attempting to resume partial backup"
 else
 	echo "Making new-backup directory"
-	mkdir $BACKUP_DIR/$SERVER/new-backup
+	mkdir $BACKUP_DIR/$SERVER/backups/.new-backup
 fi
 echo
 
 echo "Starting backup."
-rsync -avvyz --progress --partial --numeric-ids --bwlimit=$BWLIMIT --exclude-from=$BACKUP_DIR/$SERVER/exclude --delete-after --rsync-path="nice -n $NICE_SERVER rsync" --link-dest=$BACKUP_DIR/$SERVER/1-backups-ago $LOGIN@$SERVER:/ $BACKUP_DIR/$SERVER/new-backup >$BACKUP_DIR/$SERVER/backup.log 2>$BACKUP_DIR/$SERVER/error.log
+rsync -avvyz --progress --partial --numeric-ids --bwlimit=$BWLIMIT --exclude-from=$BACKUP_DIR/$SERVER/exclude --delete-after --rsync-path="nice -n $NICE_SERVER rsync" --link-dest=$BACKUP_DIR/$SERVER/backups/1-backups-ago $LOGIN@$SERVER:/ $BACKUP_DIR/$SERVER/bakups/.new-backup >$BACKUP_DIR/$SERVER/backup.log 2>$BACKUP_DIR/$SERVER/error.log
 
 RSYNC_RETURN=$?
 if [ $RSYNC_RETURN == 0 ] || [ $RSYNC_RETURN == 24 ]
 then
 	echo "rsync suceeded with retval $RSYNC_RETURN while backup up $SERVER" >> $BACKUP_DIR/$SERVER/backup.log
         echo "Removing highest numbered backup ($NUM_BACKUPS)"
-        rm -rf $BACKUP_DIR/$SERVER/${NUM_BACKUPS}-backups-ago
+        rm -rf $BACKUP_DIR/$SERVER/backups/${NUM_BACKUPS}-backups-ago
 
 	for ((i=$NUM_BACKUPS;i>1;i-=1)); do
 		o=$((i-1))
-		if [ -e "$BACKUP_DIR/$SERVER/$o-backups-ago" ]
+		if [ -e "$BACKUP_DIR/$SERVER/backups/$o-backups-ago" ]
 		then
-			mv $BACKUP_DIR/$SERVER/$o-backups-ago $BACKUP_DIR/$SERVER/$i-backups-ago
+			mv $BACKUP_DIR/$SERVER/backups/$o-backups-ago $BACKUP_DIR/$SERVER/backups/$i-backups-ago
 		fi
 	done
 
-	mv $BACKUP_DIR/$SERVER/new-backup $BACKUP_DIR/$SERVER/1-backups-ago
-	touch $BACKUP_DIR/$SERVER/1-backups-ago
+	mv $BACKUP_DIR/$SERVER/.new-backup $BACKUP_DIR/$SERVER/backups/1-backups-ago
+	touch $BACKUP_DIR/$SERVER/backups/1-backups-ago
 else
 	echo "rsync failed with retval $RSYNC_RETURN while backing up $SERVER" >> $BACKUP_DIR/$SERVER/error.log
 	echo "Backup did not complete. You may try to resume, or examine $BACKUP_DIR/$SERVER/error.log for more details.";
