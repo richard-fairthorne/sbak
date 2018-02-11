@@ -1,6 +1,6 @@
 #!/bin/bash
 #    sbak - remote Server BAKups - quick and easy
-#    Copyright (C) 2009 HashBang Media
+#    Copyright (C) 2018 HashBang Media
 #    http://www.hashbang.info
 #
 #    This program is free software: you can redistribute it and/or modify
