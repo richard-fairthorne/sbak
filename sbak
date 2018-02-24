@@ -30,7 +30,7 @@ Options:
   -n <number-of-backups>  - default is 10. Try 30 or 40. They don't take much room
   -p [server-nice]        - default is 10. Range from 0 to 20. Higher numbers use
                             less server resources.
-  -l <login>              - default is root.
+  -l <login>              - default is current username.
 
 "
 
@@ -39,7 +39,7 @@ BACKUP_DIR=~/.sbak
 NUM_BACKUPS=10
 BWLIMIT=0
 NICE_SERVER=10
-LOGIN=root
+LOGIN=`whoami`
 
 # arguments
 while getopts 'b:d:n:p:l:' OPTION
