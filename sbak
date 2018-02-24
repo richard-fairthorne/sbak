@@ -21,16 +21,15 @@
 # Set usage text
 USAGE="
 
-Usage: $(basename $0) [<options>] <host>
+Usage: $(basename $0) [<options>] [<username>]@<host>
 
 Options:
 
   -b <bandwidth-limit>    - in kB/s default is 0 or no bandwidth limit
   -d <backup-directory>   - default is ~/.sbak
-  -n <number-of-backups>  - default is 10. Try 30 or 40. They don't take much room
-  -p [server-nice]        - default is 10. Range from 0 to 20. Higher numbers use
-                            less server resources.
-  -l <login>              - default is current username.
+  -n <number-of-backups>  - default is 10. Try 30 or 40.
+  -p [server-nice]        - default is 10. Range from 0 to 20. Higher numbers
+                            use less server resources.
 
 "
 
@@ -54,8 +53,10 @@ do
 	esac
 done
 shift $(($OPTIND - 1))
-
-SERVER=$1
+if [[ $1 == *"@"* ]]; then
+  LOGIN=${1%@*}
+fi
+SERVER=${1#*@}
 
 if [ "$SERVER" == "" ]
 then
@@ -80,9 +81,9 @@ else
 
 fi
 
-
 echo "sbak: (C)2009 Obstacles Gone Corporation"
 echo "Preparing to backup server: $SERVER"
+echo "Logging in as: $USER"
 echo "--"
 echo
 
