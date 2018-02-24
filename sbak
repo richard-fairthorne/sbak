@@ -21,7 +21,7 @@
 # Set usage text
 USAGE="
 
-Usage: $(basename $0) [<options>] [<username>]@<host>
+Usage: $(basename $0) [<options>] [<username>@]<remote.host> [<localarchive>]
 
 Options:
 
