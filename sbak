@@ -33,6 +33,12 @@ Options:
 
 "
 
+# Check for software requirement
+if ! which rsync; then
+  echo "rsync must be installed and on the PATH"
+  exit 1
+fi
+
 # defaults
 BACKUP_DIR=~/.sbak
 NUM_BACKUPS=10
