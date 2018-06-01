@@ -73,15 +73,17 @@ LOGIN=`whoami`
 # arguments
 while getopts 'b:d:n:p:l:' OPTION
 do
-	case $OPTION in
-		b) BWLIMIT=$OPTARG;;
-		d) BACKUP_DIR=$OPTARG;;
-		n) NUM_BACKUPS=$OPTARG;;
+  case $OPTION in
+    b) BWLIMIT=$OPTARG;;
+    d) BACKUP_DIR=$OPTARG;;
+    n) NUM_BACKUPS=$OPTARG;;
     p) NICE_SERVER=$OPTARG;;
-		l) LOGIN=$OPTARG;;
-		?) echo "$USAGE"; exit 2;;
-	esac
+    l) LOGIN=$OPTARG;;
+    ?) echo "$USAGE"; exit 2;;
+  esac
 done
+
+# login provided with servername (ssh style - user@server)
 shift $(($OPTIND - 1))
 if [[ $1 == *"@"* ]]; then
   LOGIN=${1%@*}
