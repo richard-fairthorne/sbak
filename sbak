@@ -104,6 +104,7 @@ fi
 # Protect against concurrent backups of the same server
 if [ ! -e $BACKUP_DIR/$SERVER/runpid ]
 then
+  mkdir -p $BACKUP_DIR/$SERVER
   echo $$ > $BACKUP_DIR/$SERVER/runpid
 else
   OLDPID=`cat $BACKUP_DIR/$SERVER/runpid`
