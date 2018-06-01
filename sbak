@@ -92,26 +92,26 @@ SERVER=${1#*@}
 
 if [ "$SERVER" == "" ]
 then
-	echo "$USAGE"
-	exit 3
+  echo "$USAGE"
+  exit 3
 fi
 
 # Protect against concurrent backups of the same server
 if [ ! -e $BACKUP_DIR/$SERVER/runpid ]
 then
-	echo $$ > $BACKUP_DIR/$SERVER/runpid
+  echo $$ > $BACKUP_DIR/$SERVER/runpid
 else
-	OLDPID=`cat $BACKUP_DIR/$SERVER/runpid`
+  OLDPID=`cat $BACKUP_DIR/$SERVER/runpid`
         echo "Testing if process $OLDPID is still running..."
-	kill -0 $OLDPID
+  kill -0 $OLDPID
         if [ $? != '0' ]
-	then
-	        echo "$OLDPID is dead."
+  then
+          echo "$OLDPID is dead."
           echo $$ > $BACKUP_DIR/$SERVER/runpid
-	else
-		echo "$OLDPID is still running! Exiting."
-		exit 1
-	fi
+  else
+    echo "$OLDPID is still running! Exiting."
+    exit 1
+  fi
 
 fi
 
