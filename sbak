@@ -34,10 +34,34 @@ Options:
 "
 
 # Check for software requirement
-if ! which rsync; then
+if ! which rsync
+then
   echo "rsync must be installed and on the PATH"
   exit 1
 fi
+
+# Check for rsync version 3.1 or greater
+RSYNC_VER=()
+for v in `rsync --version | head -1 | grep -o -E '[0-9]+' | head -3`
+do
+  RSYNC_VER+=($v)
+done
+
+echo -n System has RSYNC version ${RSYNC_VER[0]}.${RSYNC_VER[1]}.${RSYNC_VER[2]} -
+
+if (( ${RSYNC_VER[0]} < 3 ))
+then
+  echo "rsync version must be at least 3.1.0"
+  exit 2
+fi
+
+if (( ${RSYNC_VER[0]} == 3 )) && (( ${RSYNC_VER[1]} < 1 ))
+then
+  echo "rsync 3 must be 3.1 or greater"
+  exit 2
+fi
+
+echo "ok"
 
 # defaults
 BACKUP_DIR=~/.sbak
