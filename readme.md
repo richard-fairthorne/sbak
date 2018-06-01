@@ -1,6 +1,26 @@
 # SBAK
 
+## About
+
 sbak is a unix/linux oriented server backup tool which can be used to make regular and frequent uncompressed backups while consuming minimal disk space.
+
+## Announcement
+
+I am beginning to offer support for sbak through [HashBang Media](http://hashbang.info).
+
+sbak has been in an unmaintained state for 10 years. I've just deployed it to a major network and am now maintaining it at [Github](http://github.com/richard-fairthorne/sbak).
+
+The short term roadmap is limited but includes:
+
+- assistance with choosing which files to include in the backups
+- more sane defaults for 2018
+- better documentation
+
+Wishlist:
+
+- multithreaded rsync
+
+And and all assistance is welcome :D
 
 ## Usage
 

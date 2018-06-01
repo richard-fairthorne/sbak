@@ -1,5 +1,5 @@
 #!/bin/bash
-#    sbak - remote Server BAKups - quick and easy
+#    sbak - remote Server Backups - quick and easy
 #    Copyright (C) 2018 HashBang Media
 #    http://www.hashbang.info
 #
@@ -70,6 +70,7 @@ then
 	exit 3
 fi
 
+# Protect against concurrent backups of the same server
 if [ ! -e $BACKUP_DIR/$SERVER/runpid ]
 then
 	echo $$ > $BACKUP_DIR/$SERVER/runpid
@@ -80,6 +81,7 @@ else
         if [ $? != '0' ]
 	then
 	        echo "$OLDPID is dead."
+          echo $$ > $BACKUP_DIR/$SERVER/runpid
 	else
 		echo "$OLDPID is still running! Exiting."
 		exit 1
@@ -102,7 +104,17 @@ fi
 if [ ! -e $BACKUP_DIR/$SERVER/exclude ]
 then
 	echo "Creating empty exclude file."
-	>$BACKUP_DIR/$SERVER/exclude
+  cat <<'EOF'>$BACKUP_DIR/$SERVER/exclude
+# An empty exclude file will backup a whole drive
+
+# Include "includeMe"
+# + /includeMe
+
+# Exclude everything else
+# - /*
+
+- /*
+EOF
 fi
 
 if [ -e $BACKUP_DIR/$SERVER/backups/.new-backup ]
@@ -115,7 +127,7 @@ fi
 echo
 
 echo "Starting backup."
-rsync -avvyz --progress --partial --numeric-ids --bwlimit=$BWLIMIT --exclude-from=$BACKUP_DIR/$SERVER/exclude --delete-after --rsync-path="nice -n $NICE_SERVER rsync" --link-dest=$BACKUP_DIR/$SERVER/backups/1-backups-ago $LOGIN@$SERVER:/ $BACKUP_DIR/$SERVER/bakups/.new-backup >$BACKUP_DIR/$SERVER/backup.log 2>$BACKUP_DIR/$SERVER/error.log
+rsync -avvyz --progress --partial --numeric-ids --bwlimit=$BWLIMIT --exclude-from=$BACKUP_DIR/$SERVER/exclude --delete-after --rsync-path="nice -n $NICE_SERVER rsync" --link-dest=$BACKUP_DIR/$SERVER/backups/1-backups-ago $LOGIN@$SERVER:/ $BACKUP_DIR/$SERVER/backups/.new-backup >$BACKUP_DIR/$SERVER/backup.log 2>$BACKUP_DIR/$SERVER/error.log
 
 RSYNC_RETURN=$?
 if [ $RSYNC_RETURN == 0 ] || [ $RSYNC_RETURN == 24 ]
