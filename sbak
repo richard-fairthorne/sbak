@@ -164,9 +164,8 @@ rsync -ayz --info=progress2 --log-file=$BACKUP_DIR/$SERVER/sbak.log --partial --
 RSYNC_RETURN=$?
 if [ $RSYNC_RETURN == 0 ] || [ $RSYNC_RETURN == 24 ]
 then
-  echo "rsync suceeded with retval $RSYNC_RETURN while backup up $SERVER" >> $BACKUP_DIR/$SERVER/backup.log
-        echo "Removing highest numbered backup ($NUM_BACKUPS)"
-        rm -rf $BACKUP_DIR/$SERVER/backups/${NUM_BACKUPS}-backups-ago
+  echo "Removing highest numbered backup ($NUM_BACKUPS)"
+  rm -rf $BACKUP_DIR/$SERVER/backups/${NUM_BACKUPS}-backups-ago
 
   for ((i=$NUM_BACKUPS;i>1;i-=1)); do
     o=$((i-1))
