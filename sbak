@@ -123,13 +123,13 @@ echo
 
 if [ ! -e $BACKUP_DIR/$SERVER ]
 then
-	echo "Creating backup directory."
-	mkdir -p $BACKUP_DIR/$SERVER/backups
+  echo "Creating backup directory."
+  mkdir -p $BACKUP_DIR/$SERVER/backups
 fi
 
 if [ ! -e $BACKUP_DIR/$SERVER/exclude ]
 then
-	echo "Creating empty exclude file."
+  echo "Creating empty exclude file."
   cat <<'EOF'>$BACKUP_DIR/$SERVER/exclude
 # An empty exclude file will backup a whole drive
 
@@ -145,10 +145,10 @@ fi
 
 if [ -e $BACKUP_DIR/$SERVER/backups/.new-backup ]
 then
-	echo "Attempting to resume partial backup"
+  echo "Attempting to resume partial backup"
 else
-	echo "Making new-backup directory"
-	mkdir $BACKUP_DIR/$SERVER/backups/.new-backup
+  echo "Making new-backup directory"
+  mkdir $BACKUP_DIR/$SERVER/backups/.new-backup
 fi
 echo
 
@@ -158,23 +158,23 @@ rsync -ayz --info=progress2 --partial --numeric-ids --bwlimit=$BWLIMIT --exclude
 RSYNC_RETURN=$?
 if [ $RSYNC_RETURN == 0 ] || [ $RSYNC_RETURN == 24 ]
 then
-	echo "rsync suceeded with retval $RSYNC_RETURN while backup up $SERVER" >> $BACKUP_DIR/$SERVER/backup.log
+  echo "rsync suceeded with retval $RSYNC_RETURN while backup up $SERVER" >> $BACKUP_DIR/$SERVER/backup.log
         echo "Removing highest numbered backup ($NUM_BACKUPS)"
         rm -rf $BACKUP_DIR/$SERVER/backups/${NUM_BACKUPS}-backups-ago
 
-	for ((i=$NUM_BACKUPS;i>1;i-=1)); do
-		o=$((i-1))
-		if [ -e "$BACKUP_DIR/$SERVER/backups/$o-backups-ago" ]
-		then
-			mv $BACKUP_DIR/$SERVER/backups/$o-backups-ago $BACKUP_DIR/$SERVER/backups/$i-backups-ago
-		fi
-	done
+  for ((i=$NUM_BACKUPS;i>1;i-=1)); do
+    o=$((i-1))
+    if [ -e "$BACKUP_DIR/$SERVER/backups/$o-backups-ago" ]
+    then
+      mv $BACKUP_DIR/$SERVER/backups/$o-backups-ago $BACKUP_DIR/$SERVER/backups/$i-backups-ago
+    fi
+  done
 
-	mv $BACKUP_DIR/$SERVER/.new-backup $BACKUP_DIR/$SERVER/backups/1-backups-ago
-	touch $BACKUP_DIR/$SERVER/backups/1-backups-ago
+  mv $BACKUP_DIR/$SERVER/backups/.new-backup $BACKUP_DIR/$SERVER/backups/1-backups-ago
+  touch $BACKUP_DIR/$SERVER/backups/1-backups-ago
 else
-	echo "rsync failed with retval $RSYNC_RETURN while backing up $SERVER" >> $BACKUP_DIR/$SERVER/error.log
-	echo "Backup did not complete. You may try to resume, or examine $BACKUP_DIR/$SERVER/error.log for more details.";
+  echo "rsync failed with retval $RSYNC_RETURN while backing up $SERVER" >> $BACKUP_DIR/$SERVER/error.log
+  echo "Backup did not complete. You may try to resume, or examine $BACKUP_DIR/$SERVER/error.log for more details.";
 fi
 
 rm $BACKUP_DIR/$SERVER/runpid
