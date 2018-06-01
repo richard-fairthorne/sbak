@@ -127,7 +127,7 @@ echo "Logging in as: $USER"
 echo "--"
 echo
 
-if [ ! -e $BACKUP_DIR/$SERVER ]
+if [ ! -e $BACKUP_DIR/$SERVER/backups ]
 then
   echo "Creating backup directory."
   mkdir -p $BACKUP_DIR/$SERVER/backups
