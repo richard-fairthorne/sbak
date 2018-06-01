@@ -145,8 +145,10 @@ then
 # Exclude everything else
 # - /*
 
+# Comment this out to include everything
 - /*
 EOF
+  vi $BACKUP_DIR/$SERVER/exclude
 fi
 
 if [ -e $BACKUP_DIR/$SERVER/backups/.new-backup ]
