@@ -137,6 +137,9 @@ if [ ! -e $BACKUP_DIR/$SERVER/exclude ]
 then
   echo "Creating empty exclude file."
   cat <<'EOF'>$BACKUP_DIR/$SERVER/exclude
+- /*
+
+# ---
 # An empty exclude file will backup a whole drive
 
 # Include "includeMe"
@@ -146,7 +149,7 @@ then
 # - /*
 
 # Comment this out to include everything
-- /*
+
 EOF
   vi $BACKUP_DIR/$SERVER/exclude
 fi
