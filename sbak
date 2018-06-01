@@ -159,7 +159,7 @@ fi
 echo
 
 echo "Starting backup."
-rsync -ayz --info=progress2 --partial --numeric-ids --bwlimit=$BWLIMIT --exclude-from=$BACKUP_DIR/$SERVER/exclude --delete-after --rsync-path="nice -n $NICE_SERVER rsync" --link-dest=$BACKUP_DIR/$SERVER/backups/1-backups-ago $LOGIN@$SERVER:/ $BACKUP_DIR/$SERVER/backups/.new-backup 2>$BACKUP_DIR/$SERVER/error.log
+rsync -ayz --info=progress2 --log-file=$BACKUP_DIR/$SERVER/sbak.log --partial --numeric-ids --bwlimit=$BWLIMIT --exclude-from=$BACKUP_DIR/$SERVER/exclude --delete-after --rsync-path="nice -n $NICE_SERVER rsync" --link-dest=$BACKUP_DIR/$SERVER/backups/1-backups-ago $LOGIN@$SERVER:/ $BACKUP_DIR/$SERVER/backups/.new-backup 2>$BACKUP_DIR/$SERVER/error.log
 
 RSYNC_RETURN=$?
 if [ $RSYNC_RETURN == 0 ] || [ $RSYNC_RETURN == 24 ]
