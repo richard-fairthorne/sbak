@@ -18,6 +18,12 @@
 #
 # ########################################################################
 
+# version
+MAJOR=1
+MINOR=1
+REVISION=0
+VERSION=$MAJOR.$MINOR.$REVISION
+
 # Set usage text
 USAGE="
 Usage: $(basename $0) [<options>] [<username>@]<remote.host> [<localarchive>]
