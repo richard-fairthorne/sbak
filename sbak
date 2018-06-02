@@ -18,6 +18,9 @@
 #
 # ########################################################################
 
+# Use a good echo
+echo=`which echo`
+
 # version
 MAJOR=1
 MINOR=1
@@ -60,7 +63,7 @@ do
 done
 
 # Check for software requirement
-if ! which rsync
+if [ "" == "`which rsync`" ]
 then
   echo "rsync must be installed and on the PATH"
   exit 1
@@ -73,7 +76,7 @@ do
   RSYNC_VER+=($v)
 done
 
-echo -n System has RSYNC version ${RSYNC_VER[0]}.${RSYNC_VER[1]}.${RSYNC_VER[2]} -
+$echo -n System has RSYNC version ${RSYNC_VER[0]}.${RSYNC_VER[1]}.${RSYNC_VER[2]} -
 
 if (( ${RSYNC_VER[0]} < 3 ))
 then
