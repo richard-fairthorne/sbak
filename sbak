@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #    sbak - remote Server Backups - quick and easy
 #    Copyright (C) 2018 Richard Fairthorne
 #    http://www.hashbang.info
