@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
 cp sbak /usr/local/bin/sbak
